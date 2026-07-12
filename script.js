@@ -1,5 +1,3 @@
-// script.js
-
 "use strict";
 
 const scheduler = {
@@ -29,9 +27,15 @@ const scheduler = {
 };
 
 const schedulerGrid = document.querySelector("#scheduler-grid");
+const taskForm = document.querySelector("#task-form");
+const taskNameInput = document.querySelector("#task-name");
+const taskFrequencyInput = document.querySelector("#task-frequency");
+const taskNextExecutionInput = document.querySelector("#task-next-execution");
 
 function createTaskCell(content) {
   const cell = document.createElement("div");
+
+  cell.classList.add("task-cell");
   cell.textContent = content;
 
   return cell;
@@ -40,6 +44,8 @@ function createTaskCell(content) {
 function createStatusCell(status) {
   const cell = document.createElement("div");
   const badge = document.createElement("span");
+
+  cell.classList.add("task-cell");
 
   badge.classList.add("status", status === "Activa" ? "active" : "paused");
 
@@ -50,6 +56,10 @@ function createStatusCell(status) {
 }
 
 function renderTasks() {
+  const renderedCells = schedulerGrid.querySelectorAll(".task-cell");
+
+  renderedCells.forEach((cell) => cell.remove());
+
   scheduler.tasks.forEach((task) => {
     schedulerGrid.append(
       createTaskCell(task.name),
@@ -59,5 +69,44 @@ function renderTasks() {
     );
   });
 }
+
+function formatNextExecution(value) {
+  const date = new Date(value);
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = new Intl.DateTimeFormat("es-AR", {
+    month: "short",
+  })
+    .format(date)
+    .replace(".", "");
+
+  const time = new Intl.DateTimeFormat("es-AR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(date);
+
+  return `${day} ${month} · ${time}`;
+}
+
+function handleTaskSubmit(event) {
+  event.preventDefault();
+
+  const newTask = {
+    id: crypto.randomUUID(),
+    name: taskNameInput.value.trim(),
+    frequency: taskFrequencyInput.value,
+    nextExecution: formatNextExecution(taskNextExecutionInput.value),
+    status: "Activa",
+  };
+
+  scheduler.tasks.push(newTask);
+
+  renderTasks();
+  taskForm.reset();
+  taskNameInput.focus();
+}
+
+taskForm.addEventListener("submit", handleTaskSubmit);
 
 renderTasks();
