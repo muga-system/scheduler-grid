@@ -171,7 +171,60 @@ h1 {
   border-color: #edd78c;
 }
 
+.task-form-section {
+  margin-bottom: 32px;
+  border: 1px solid #bac8d8;
+  background: #f7faff;
+}
+
+.task-form {
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 2fr)
+    minmax(160px, 1fr)
+    minmax(220px, 1.5fr)
+    auto;
+  gap: 16px;
+  align-items: end;
+  padding: 24px;
+}
+
+.task-form label {
+  display: grid;
+  gap: 8px;
+  color: #425166;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.task-form input,
+.task-form select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #aebdcd;
+  border-radius: 0;
+  color: #172033;
+  background: #ffffff;
+}
+
+.task-form input:focus,
+.task-form select:focus {
+  border-color: #245f9e;
+  outline: 3px solid rgba(36, 95, 158, 0.18);
+  outline-offset: 1px;
+}
+
 @media (max-width: 900px) {
+  .task-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .task-form .primary-button {
+    width: 100%;
+  }
+
   .scheduler-grid {
     grid-template-columns: 1fr;
   }
@@ -186,6 +239,10 @@ h1 {
 }
 
 @media (max-width: 720px) {
+  .task-form {
+    grid-template-columns: 1fr;
+  }
+
   .site-header {
     align-items: flex-start;
     flex-direction: column;

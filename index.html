@@ -26,6 +26,50 @@
     </header>
 
     <main class="app">
+      <section class="task-form-section" aria-labelledby="task-form-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">Nueva programación</p>
+            <h2 id="task-form-title">Crear tarea</h2>
+          </div>
+        </div>
+
+        <form class="task-form" id="task-form">
+          <label>
+            Nombre
+            <input
+              type="text"
+              id="task-name"
+              name="taskName"
+              autocomplete="off"
+              required
+            />
+          </label>
+
+          <label>
+            Frecuencia
+            <select id="task-frequency" name="taskFrequency" required>
+              <option value="">Seleccionar</option>
+              <option value="Diaria">Diaria</option>
+              <option value="Semanal">Semanal</option>
+              <option value="Mensual">Mensual</option>
+            </select>
+          </label>
+
+          <label>
+            Próxima ejecución
+            <input
+              type="datetime-local"
+              id="task-next-execution"
+              name="taskNextExecution"
+              required
+            />
+          </label>
+
+          <button type="submit" class="primary-button">Programar tarea</button>
+        </form>
+      </section>
+
       <section class="scheduler" aria-labelledby="scheduler-title">
         <div class="section-heading">
           <div>
@@ -42,8 +86,6 @@
           <div class="grid-header">Próxima ejecución</div>
           <div class="grid-header">Estado</div>
         </div>
-
-
       </section>
     </main>
   </body>
