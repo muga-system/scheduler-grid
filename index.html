@@ -1,0 +1,50 @@
+<!-- index.html -->
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Scheduler Grid</title>
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">muga.dev / sistemas mínimos 03</p>
+        <h1>Scheduler Grid</h1>
+      </div>
+
+      <p class="header-description">
+        Una herramienta mínima para organizar tareas programadas, frecuencias y
+        próximas ejecuciones.
+      </p>
+    </header>
+
+    <main class="app">
+      <section class="scheduler" aria-labelledby="scheduler-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">Planificación</p>
+            <h2 id="scheduler-title">Tareas programadas</h2>
+          </div>
+
+          <button type="button" class="primary-button">Nueva tarea</button>
+        </div>
+
+        <div class="scheduler-grid" id="scheduler-grid">
+          <div class="grid-header">Tarea</div>
+          <div class="grid-header">Frecuencia</div>
+          <div class="grid-header">Próxima ejecución</div>
+          <div class="grid-header">Estado</div>
+        </div>
+
+
+      </section>
+    </main>
+  </body>
+</html>
