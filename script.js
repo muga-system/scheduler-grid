@@ -41,16 +41,23 @@ function createTaskCell(content) {
   return cell;
 }
 
-function createStatusCell(status) {
+function createStatusCell(task) {
   const cell = document.createElement("div");
-  const badge = document.createElement("span");
+  const button = document.createElement("button");
 
   cell.classList.add("task-cell");
 
-  badge.classList.add("status", status === "Activa" ? "active" : "paused");
+  button.classList.add(
+    "status",
+    task.status === "Activa" ? "active" : "paused",
+  );
 
-  badge.textContent = status;
-  cell.append(badge);
+  button.type = "button";
+  button.dataset.taskId = task.id;
+  button.textContent = task.status;
+  button.setAttribute("aria-label", `Cambiar estado de ${task.name}`);
+
+  cell.append(button);
 
   return cell;
 }
@@ -65,7 +72,7 @@ function renderTasks() {
       createTaskCell(task.name),
       createTaskCell(task.frequency),
       createTaskCell(task.nextExecution),
-      createStatusCell(task.status),
+      createStatusCell(task),
     );
   });
 }
@@ -107,6 +114,27 @@ function handleTaskSubmit(event) {
   taskNameInput.focus();
 }
 
+function handleSchedulerClick(event) {
+  const statusButton = event.target.closest(".status");
+
+  if (!statusButton) {
+    return;
+  }
+
+  const task = scheduler.tasks.find(
+    (currentTask) => currentTask.id === statusButton.dataset.taskId,
+  );
+
+  if (!task) {
+    return;
+  }
+
+  task.status = task.status === "Activa" ? "Pausada" : "Activa";
+
+  renderTasks();
+}
+
+schedulerGrid.addEventListener("click", handleSchedulerClick);
 taskForm.addEventListener("submit", handleTaskSubmit);
 
 renderTasks();
