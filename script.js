@@ -1,6 +1,7 @@
 "use strict";
 
 const scheduler = {
+  executionLog: [],
   tasks: [
     {
       id: crypto.randomUUID(),
@@ -31,6 +32,8 @@ const taskForm = document.querySelector("#task-form");
 const taskNameInput = document.querySelector("#task-name");
 const taskFrequencyInput = document.querySelector("#task-frequency");
 const taskNextExecutionInput = document.querySelector("#task-next-execution");
+const executionLog = document.querySelector("#execution-log");
+const emptyLog = document.querySelector("#empty-log");
 
 function createTaskCell(content) {
   const cell = document.createElement("div");
@@ -62,6 +65,45 @@ function createStatusCell(task) {
   return cell;
 }
 
+function createActionCell(task) {
+  const cell = document.createElement("div");
+  const button = document.createElement("button");
+
+  cell.classList.add("task-cell");
+
+  button.classList.add("action-button");
+  button.type = "button";
+  button.dataset.action = "execute";
+  button.dataset.taskId = task.id;
+  button.textContent = "Ejecutar";
+
+  cell.append(button);
+
+  return cell;
+}
+
+function renderExecutionLog() {
+  executionLog.innerHTML = "";
+
+  if (scheduler.executionLog.length === 0) {
+    executionLog.append(emptyLog);
+    return;
+  }
+
+  scheduler.executionLog.forEach((entry) => {
+    const item = document.createElement("p");
+
+    item.classList.add("execution-entry");
+
+    item.innerHTML = `
+      <strong>${entry.name}</strong>
+      <time>${entry.executedAt}</time>
+    `;
+
+    executionLog.append(item);
+  });
+}
+
 function renderTasks() {
   const renderedCells = schedulerGrid.querySelectorAll(".task-cell");
 
@@ -73,6 +115,7 @@ function renderTasks() {
       createTaskCell(task.frequency),
       createTaskCell(task.nextExecution),
       createStatusCell(task),
+      createActionCell(task),
     );
   });
 }
@@ -115,6 +158,29 @@ function handleTaskSubmit(event) {
 }
 
 function handleSchedulerClick(event) {
+  const executeButton = event.target.closest(".action-button");
+
+  if (executeButton) {
+    const task = scheduler.tasks.find(
+      (currentTask) => currentTask.id === executeButton.dataset.taskId,
+    );
+
+    if (!task) {
+      return;
+    }
+
+    scheduler.executionLog.unshift({
+      name: task.name,
+      executedAt: new Intl.DateTimeFormat("es-AR", {
+        dateStyle: "short",
+        timeStyle: "short",
+      }).format(new Date()),
+    });
+
+    renderExecutionLog();
+    return;
+  }
+
   const statusButton = event.target.closest(".status");
 
   if (!statusButton) {
@@ -138,3 +204,4 @@ schedulerGrid.addEventListener("click", handleSchedulerClick);
 taskForm.addEventListener("submit", handleTaskSubmit);
 
 renderTasks();
+renderExecutionLog();
