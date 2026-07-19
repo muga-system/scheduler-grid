@@ -7,21 +7,21 @@ const scheduler = {
       id: crypto.randomUUID(),
       name: "Backup Base de Datos",
       frequency: "Diaria",
-      nextExecution: "11 Jul · 02:00",
+      nextExecution: "2026-07-17T02:00",
       status: "Activa",
     },
     {
       id: crypto.randomUUID(),
       name: "Enviar Reporte",
       frequency: "Semanal",
-      nextExecution: "13 Jul · 09:00",
+      nextExecution: "2026-07-20T09:00",
       status: "Pausada",
     },
     {
       id: crypto.randomUUID(),
       name: "Limpieza Logs",
       frequency: "Mensual",
-      nextExecution: "01 Ago · 00:30",
+      nextExecution: "2026-08-01T00:30",
       status: "Activa",
     },
   ],
@@ -113,7 +113,7 @@ function renderTasks() {
     schedulerGrid.append(
       createTaskCell(task.name),
       createTaskCell(task.frequency),
-      createTaskCell(task.nextExecution),
+      createTaskCell(formatNextExecution(task.nextExecution)),
       createStatusCell(task),
       createActionCell(task),
     );
@@ -139,6 +139,26 @@ function formatNextExecution(value) {
   return `${day} ${month} · ${time}`;
 }
 
+function calculateNextExecution(task) {
+  const nextDate = new Date(task.nextExecution);
+
+  switch (task.frequency) {
+    case "Diaria":
+      nextDate.setDate(nextDate.getDate() + 1);
+      break;
+
+    case "Semanal":
+      nextDate.setDate(nextDate.getDate() + 7);
+      break;
+
+    case "Mensual":
+      nextDate.setMonth(nextDate.getMonth() + 1);
+      break;
+  }
+
+  return nextDate.toISOString().slice(0, 16);
+}
+
 function handleTaskSubmit(event) {
   event.preventDefault();
 
@@ -146,7 +166,7 @@ function handleTaskSubmit(event) {
     id: crypto.randomUUID(),
     name: taskNameInput.value.trim(),
     frequency: taskFrequencyInput.value,
-    nextExecution: formatNextExecution(taskNextExecutionInput.value),
+    nextExecution: taskNextExecutionInput.value,
     status: "Activa",
   };
 
@@ -177,7 +197,10 @@ function handleSchedulerClick(event) {
       }).format(new Date()),
     });
 
+    task.nextExecution = calculateNextExecution(task);
+
     renderExecutionLog();
+    renderTasks();
     return;
   }
 
