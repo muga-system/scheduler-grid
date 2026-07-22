@@ -115,6 +115,29 @@ h1 {
   letter-spacing: -0.04em;
 }
 
+.next-execution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.next-execution small {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.next-execution.atrasada small {
+  color: #b42318;
+}
+
+.next-execution.proxima small {
+  color: #b54708;
+}
+
+.next-execution.programada small {
+  color: #027a48;
+}
+
 .primary-button {
   min-height: 44px;
   padding: 0 18px;

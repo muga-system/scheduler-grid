@@ -44,6 +44,26 @@ function createTaskCell(content) {
   return cell;
 }
 
+function createNextExecutionCell(task) {
+  const cell = document.createElement("div");
+  const timingStatus = getTaskTimingStatus(task);
+
+  const timingStatusClass = {
+    Atrasada: "atrasada",
+    Próxima: "proxima",
+    Programada: "programada",
+  }[timingStatus];
+
+  cell.classList.add("task-cell", "next-execution", timingStatusClass);
+
+  cell.innerHTML = `
+    <span>${formatNextExecution(task.nextExecution)}</span>
+    <small>${timingStatus}</small>
+  `;
+
+  return cell;
+}
+
 function createStatusCell(task) {
   const cell = document.createElement("div");
   const button = document.createElement("button");
@@ -113,7 +133,7 @@ function renderTasks() {
     schedulerGrid.append(
       createTaskCell(task.name),
       createTaskCell(task.frequency),
-      createTaskCell(formatNextExecution(task.nextExecution)),
+      createNextExecutionCell(task),
       createStatusCell(task),
       createActionCell(task),
     );
@@ -157,6 +177,23 @@ function calculateNextExecution(task) {
   }
 
   return nextDate.toISOString().slice(0, 16);
+}
+
+function getTaskTimingStatus(task) {
+  const now = new Date();
+  const nextExecution = new Date(task.nextExecution);
+  const differenceInMilliseconds = nextExecution.getTime() - now.getTime();
+  const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+
+  if (differenceInMilliseconds < 0) {
+    return "Atrasada";
+  }
+
+  if (differenceInMilliseconds <= oneDayInMilliseconds) {
+    return "Próxima";
+  }
+
+  return "Programada";
 }
 
 function handleTaskSubmit(event) {
