@@ -129,7 +129,14 @@ function renderTasks() {
 
   renderedCells.forEach((cell) => cell.remove());
 
-  scheduler.tasks.forEach((task) => {
+  const sortedTasks = [...scheduler.tasks].sort((taskA, taskB) => {
+    return (
+      new Date(taskA.nextExecution).getTime() -
+      new Date(taskB.nextExecution).getTime()
+    );
+  });
+
+  sortedTasks.forEach((task) => {
     schedulerGrid.append(
       createTaskCell(task.name),
       createTaskCell(task.frequency),
