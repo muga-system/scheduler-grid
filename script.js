@@ -27,6 +27,7 @@ const scheduler = {
   ],
 };
 
+const taskSummary = document.querySelector("#task-summary");
 const schedulerGrid = document.querySelector("#scheduler-grid");
 const taskForm = document.querySelector("#task-form");
 const taskNameInput = document.querySelector("#task-name");
@@ -125,9 +126,7 @@ function renderExecutionLog() {
 }
 
 function renderTasks() {
-  const renderedCells = schedulerGrid.querySelectorAll(".task-cell");
-
-  renderedCells.forEach((cell) => cell.remove());
+  schedulerGrid.querySelectorAll(".task-cell").forEach((cell) => cell.remove());
 
   const sortedTasks = [...scheduler.tasks].sort((taskA, taskB) => {
     if (taskA.status !== taskB.status) {
@@ -149,6 +148,8 @@ function renderTasks() {
       createActionCell(task),
     );
   });
+
+  renderTaskSummary();
 }
 
 function formatNextExecution(value) {
@@ -205,6 +206,27 @@ function getTaskTimingStatus(task) {
   }
 
   return "Programada";
+}
+
+function getTaskSummary() {
+  const activeTasks = scheduler.tasks.filter(
+    (task) => task.status === "Activa",
+  ).length;
+
+  const pausedTasks = scheduler.tasks.filter(
+    (task) => task.status === "Pausada",
+  ).length;
+
+  return {
+    activeTasks,
+    pausedTasks,
+  };
+}
+
+function renderTaskSummary() {
+  const { activeTasks, pausedTasks } = getTaskSummary();
+
+  taskSummary.textContent = `${activeTasks} activas · ${pausedTasks} pausadas`;
 }
 
 function handleTaskSubmit(event) {

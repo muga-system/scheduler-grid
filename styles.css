@@ -115,6 +115,13 @@ h1 {
   letter-spacing: -0.04em;
 }
 
+.task-summary {
+  margin: 8px 0 0;
+  color: #56657a;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .next-execution {
   display: flex;
   flex-direction: column;
