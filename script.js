@@ -97,6 +97,7 @@ function createActionCell(task) {
   button.dataset.action = "execute";
   button.dataset.taskId = task.id;
   button.textContent = "Ejecutar";
+  button.disabled = task.status === "Pausada";
 
   cell.append(button);
 

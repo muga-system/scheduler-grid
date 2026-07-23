@@ -277,6 +277,19 @@ h1 {
   color: #245f9e;
 }
 
+.action-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  border-color: #c7d1dc;
+  color: #7b8796;
+  background: #edf2f7;
+}
+
+.action-button:disabled:hover {
+  border-color: #c7d1dc;
+  color: #7b8796;
+}
+
 .action-button:focus-visible {
   outline: 3px solid rgba(36, 95, 158, 0.25);
   outline-offset: 2px;
