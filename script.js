@@ -130,6 +130,10 @@ function renderTasks() {
   renderedCells.forEach((cell) => cell.remove());
 
   const sortedTasks = [...scheduler.tasks].sort((taskA, taskB) => {
+    if (taskA.status !== taskB.status) {
+      return taskA.status === "Activa" ? -1 : 1;
+    }
+
     return (
       new Date(taskA.nextExecution).getTime() -
       new Date(taskB.nextExecution).getTime()
